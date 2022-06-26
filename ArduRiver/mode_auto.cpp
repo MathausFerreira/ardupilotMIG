@@ -25,7 +25,7 @@ bool ModeAuto::init(bool ignore_checks)
     auto_RTL = false;
     if (mission.num_commands() > 1 || ignore_checks) {
         // reject switching to auto mode if landed with motors armed but first command is not a takeoff (reduce chance of flips)
-        if (motors->armed() && copter.ap.land_complete && !mission.starts_with_takeoff_cmd()) {
+        if (motors->armed() && copter.ap.land_complete) { //Mathaus
             gcs().send_text(MAV_SEVERITY_CRITICAL, "Auto: Missing Takeoff Cmd");
             return false;
         }
@@ -53,10 +53,10 @@ bool ModeAuto::init(bool ignore_checks)
         // reset flag indicating if pilot has applied roll or pitch inputs during landing
         copter.ap.land_repo_active = false;
 
-#if PRECISION_LANDING == ENABLED
-        // initialise precland state machine
-        copter.precland_statemachine.init();
-#endif
+// #if PRECISION_LANDING == ENABLED
+//         // initialise precland state machine
+//         copter.precland_statemachine.init();
+// #endif
 
         return true;
     } else {
@@ -1798,14 +1798,6 @@ void ModeAuto::do_RTL(void)
 // verify_takeoff - check if we have completed the takeoff
 bool ModeAuto::verify_takeoff()
 {
-#if LANDING_GEAR_ENABLED == ENABLED
-    // if we have reached our destination
-    if (auto_takeoff_complete) {
-        // retract the landing gear
-        copter.landinggear.retract_after_takeoff();
-    }
-#endif
-
     return auto_takeoff_complete;
 }
 

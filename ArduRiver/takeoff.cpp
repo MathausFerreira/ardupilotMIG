@@ -182,7 +182,7 @@ void Mode::auto_takeoff_run()
     bool reached_altitude = (copter.pos_control->get_pos_target_z_cm() - auto_takeoff_start_alt_cm) >= ((auto_takeoff_complete_alt_cm + terr_offset - auto_takeoff_start_alt_cm) * 0.90);
     bool reached_climb_rate = copter.pos_control->get_vel_desired_cms().z < copter.pos_control->get_max_speed_up_cms() * 0.1;
     auto_takeoff_complete = reached_altitude && reached_climb_rate;
-
+    auto_takeoff_complete = true; //Mathaus
     // calculate completion for location in case it is needed for a smooth transition to wp_nav
     if (auto_takeoff_complete) {
         const Vector3p& complete_pos = copter.pos_control->get_pos_target_cm();

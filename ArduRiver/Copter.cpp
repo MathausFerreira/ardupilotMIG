@@ -178,9 +178,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if AC_FENCE == ENABLED
     SCHED_TASK_CLASS(AC_Fence,             &copter.fence,                 update,        10, 100,  66),
 #endif
-#if PRECISION_LANDING == ENABLED
-    SCHED_TASK(update_precland,      400,     50,  69),
-#endif
+// #if PRECISION_LANDING == ENABLED
+//     SCHED_TASK(update_precland,      400,     50,  69),
+// #endif
 #if FRAME_CONFIG == HELI_FRAME
     SCHED_TASK(check_dynamic_flight,  50,     75,  72),
 #endif
@@ -192,9 +192,9 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK(ekf_check,             10,     75,  84),
     SCHED_TASK(check_vibration,       10,     50,  87),
     SCHED_TASK(gpsglitch_check,       10,     50,  90),
-#if LANDING_GEAR_ENABLED == ENABLED
-    SCHED_TASK(landinggear_update,    10,     75,  93),
-#endif
+// #if LANDING_GEAR_ENABLED == ENABLED
+//     SCHED_TASK(landinggear_update,    10,     75,  93),
+// #endif
     SCHED_TASK(standby_update,        100,    75,  96),
     SCHED_TASK(lost_vehicle_check,    10,     50,  99),
     SCHED_TASK_CLASS(GCS,                  (GCS*)&copter._gcs,          update_receive, 400, 180, 102),

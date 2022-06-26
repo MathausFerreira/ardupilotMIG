@@ -190,8 +190,8 @@ public:
     friend class AutoTune;
 
     friend class Mode;
-    friend class ModeAcro;
-    friend class ModeAcro_Heli;
+    // friend class ModeAcro;
+    // friend class ModeAcro_Heli;
     friend class ModeAltHold;
     friend class ModeAuto;
     friend class ModeAutoTune;
@@ -199,23 +199,23 @@ public:
     friend class ModeBrake;
     friend class ModeCircle;
     friend class ModeDrift;
-    friend class ModeFlip;
+    // friend class ModeFlip;
     friend class ModeFlowHold;
     friend class ModeFollow;
     friend class ModeGuided;
-    friend class ModeLand;
-    friend class ModeLoiter;
+    // friend class ModeLand;
+    // friend class ModeLoiter;
     friend class ModePosHold;
     friend class ModeRTL;
     friend class ModeSmartRTL;
-    friend class ModeSport;
+    // friend class ModeSport;
     friend class ModeStabilize;
-    friend class ModeStabilize_Heli;
+    // friend class ModeStabilize_Heli;
     friend class ModeSystemId;
-    friend class ModeThrow;
+    // friend class ModeThrow;
     friend class ModeZigZag;
     friend class ModeAutorotate;
-    friend class ModeTurtle;
+    // friend class ModeTurtle;
 
     Copter(void);
 

@@ -51,11 +51,7 @@ bool AP_Arming_Copter::run_pre_arm_checks(bool display_failure)
         & motor_checks(display_failure)
         & oa_checks(display_failure)
         & gcs_failsafe_check(display_failure)
-        & winch_checks(display_failure)
         & alt_checks(display_failure)
-#if AP_AIRSPEED_ENABLED
-        & AP_Arming::airspeed_checks(display_failure)
-#endif
         & AP_Arming::pre_arm_checks(display_failure);
 }
 
@@ -512,6 +508,7 @@ bool AP_Arming_Copter::gcs_failsafe_check(bool display_failure)
 }
 
 // check winch
+/*
 bool AP_Arming_Copter::winch_checks(bool display_failure) const
 {
 #if WINCH_ENABLED == ENABLED
@@ -532,7 +529,7 @@ bool AP_Arming_Copter::winch_checks(bool display_failure) const
 #endif
     return true;
 }
-
+*/
 // performs altitude checks.  returns true if passed
 bool AP_Arming_Copter::alt_checks(bool display_failure)
 {
