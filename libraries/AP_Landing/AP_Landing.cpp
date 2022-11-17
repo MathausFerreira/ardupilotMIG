@@ -124,7 +124,7 @@ const AP_Param::GroupInfo AP_Landing::var_info[] = {
 
     // @Param: ABORT_THR
     // @DisplayName: Landing abort using throttle
-    // @Description: Allow a landing abort to trigger with a throttle > 95%
+    // @Description: Allow a landing abort to trigger with an input throttle >= 90%. This works with or without stick-mixing enabled.
     // @Values: 0:Disabled, 1:Enabled
     // @User: Advanced
     AP_GROUPINFO("ABORT_THR", 12, AP_Landing, abort_throttle_enable, 0),
@@ -164,7 +164,7 @@ const AP_Param::GroupInfo AP_Landing::var_info[] = {
 };
 
     // constructor
-AP_Landing::AP_Landing(AP_Mission &_mission, AP_AHRS &_ahrs, AP_TECS *_tecs_Controller, AP_Navigation *_nav_controller, AP_Vehicle::FixedWing &_aparm,
+AP_Landing::AP_Landing(AP_Mission &_mission, AP_AHRS &_ahrs, AP_TECS *_tecs_Controller, AP_Navigation *_nav_controller, AP_FixedWing &_aparm,
                        set_target_altitude_proportion_fn_t _set_target_altitude_proportion_fn,
                        constrain_target_altitude_location_fn_t _constrain_target_altitude_location_fn,
                        adjusted_altitude_cm_fn_t _adjusted_altitude_cm_fn,
@@ -267,11 +267,12 @@ bool AP_Landing::verify_abort_landing(const Location &prev_WP_loc, Location &nex
              mission.resume();
          }
          // else we're in AUTO with a stopped mission and handle_auto_mode() will set RTL
-
+#if AP_FENCE_ENABLED
         AC_Fence *fence = AP::fence();
         if (fence) {
             fence->auto_enable_fence_after_takeoff();
         }
+#endif
      }
 
      Log();
@@ -280,7 +281,7 @@ bool AP_Landing::verify_abort_landing(const Location &prev_WP_loc, Location &nex
      return false;
 }
 
-void AP_Landing::adjust_landing_slope_for_rangefinder_bump(AP_Vehicle::FixedWing::Rangefinder_State &rangefinder_state, Location &prev_WP_loc, Location &next_WP_loc, const Location &current_loc, const float wp_distance, int32_t &target_altitude_offset_cm)
+void AP_Landing::adjust_landing_slope_for_rangefinder_bump(AP_FixedWing::Rangefinder_State &rangefinder_state, Location &prev_WP_loc, Location &next_WP_loc, const Location &current_loc, const float wp_distance, int32_t &target_altitude_offset_cm)
 {
     switch (type) {
     case TYPE_STANDARD_GLIDE_SLOPE:

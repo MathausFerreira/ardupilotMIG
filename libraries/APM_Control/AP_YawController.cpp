@@ -20,6 +20,8 @@
 #include <AP_HAL/AP_HAL.h>
 #include "AP_YawController.h"
 #include <AP_AHRS/AP_AHRS.h>
+#include <GCS_MAVLink/GCS.h>
+#include <AP_Scheduler/AP_Scheduler.h>
 
 extern const AP_HAL::HAL& hal;
 
@@ -148,7 +150,7 @@ const AP_Param::GroupInfo AP_YawController::var_info[] = {
     AP_GROUPEND
 };
 
-AP_YawController::AP_YawController(const AP_Vehicle::FixedWing &parms)
+AP_YawController::AP_YawController(const AP_FixedWing &parms)
     : aparm(parms)
 {
     AP_Param::setup_object_defaults(this, var_info);
@@ -164,6 +166,7 @@ int32_t AP_YawController::get_servo_out(float scaler, bool disable_integrator)
     uint32_t dt = tnow - _last_t;
     if (_last_t == 0 || dt > 1000) {
         dt = 0;
+        _pid_info.I = 0;
     }
     _last_t = tnow;
 
@@ -343,7 +346,15 @@ float AP_YawController::get_rate_out(float desired_rate, float scaler, bool disa
 
 void AP_YawController::reset_I()
 {
+    _pid_info.I = 0;
+    rate_pid.reset_I();
     _integrator = 0;
+}
+
+void AP_YawController::reset_rate_PID()
+{
+    rate_pid.reset_I();
+    rate_pid.reset_filter();
 }
 
 /*
@@ -353,7 +364,7 @@ void AP_YawController::autotune_start(void)
 {
     if (autotune == nullptr && rate_control_enabled()) {
         // the autotuner needs a time constant. Use an assumed tconst of 0.5
-        gains.tau = 0.5;
+        gains.tau.set(0.5);
         gains.rmax_pos.set(90);
 
         autotune = new AP_AutoTune(gains, AP_AutoTune::AUTOTUNE_YAW, aparm, rate_pid);
