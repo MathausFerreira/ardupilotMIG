@@ -200,7 +200,7 @@ public:
     friend class ModeCircle;
     friend class ModeDrift;
     // friend class ModeFlip;
-    friend class ModeFlowHold;
+    // friend class ModeFlowHold;
     friend class ModeFollow;
     friend class ModeGuided;
     // friend class ModeLand;
@@ -990,9 +990,9 @@ private:
 #if MODE_SMARTRTL_ENABLED == ENABLED
     ModeSmartRTL mode_smartrtl;
 #endif
-#if !HAL_MINIMIZE_FEATURES && AP_OPTICALFLOW_ENABLED
-    ModeFlowHold mode_flowhold;
-#endif
+// #if !HAL_MINIMIZE_FEATURES && AP_OPTICALFLOW_ENABLED
+//     ModeFlowHold mode_flowhold;
+// #endif
 #if MODE_ZIGZAG_ENABLED == ENABLED
     ModeZigZag mode_zigzag;
 #endif
