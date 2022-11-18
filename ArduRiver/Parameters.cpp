@@ -642,7 +642,7 @@ const AP_Param::Info Copter::var_info[] = {
     GOBJECTVARPTR(motors, "H_",        &copter.motors_var_info),
 #else
     // @Group: MOT_
-    // @Path: ../libraries/AP_Motors/AP_MotorsMulticopter.cpp
+    // @Path: ../libraries/AP_Motors/AP_MotorsRiver.cpp
     GOBJECTVARPTR(motors, "MOT_",      &copter.motors_var_info),
 #endif
 
