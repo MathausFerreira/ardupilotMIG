@@ -236,7 +236,8 @@ private:
     RC_Channel *channel_pitch;
     RC_Channel *channel_throttle;
     RC_Channel *channel_yaw;
-
+    RC_Channel *channel_gain; //Mathaus
+    
     AP_Logger logger;
 
     // flight modes convenience array
@@ -424,6 +425,20 @@ private:
     int32_t super_simple_last_bearing;
     float super_simple_cos_yaw;
     float super_simple_sin_yaw;
+
+
+    // Mathaus Variables
+    float gain = 1.0f;
+    bool gain_min = false;
+    bool gain_max = false;
+
+
+    // Mathaus Functions
+    float get_gain();
+    void direct_allocation(float &PWM1,float &PWM2,float &PWM3,float &PWM4);
+    void log_write_grin();
+
+
 
     // Stores initial bearing when armed - initial simple bearing is modified in super simple mode so not suitable
     int32_t initial_armed_bearing;

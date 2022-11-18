@@ -1,4 +1,35 @@
 #include "Copter.h"
+#include <GCS_MAVLink/GCS.h>
+
+
+
+
+float Copter::get_gain(){
+    if (channel_gain->norm_input() > 0.5){
+        gain = gain - 1.0f / 400.0f;
+    }
+    if (channel_gain->norm_input() < -0.5){
+        gain = gain + 1.0f / 400.0f;
+    }
+
+    gain = constrain_float(gain, 0.05f, 1.0f);
+
+    if (gain > 0.9975f && !gain_max){
+        gcs().send_text(MAV_SEVERITY_WARNING, "MAXIMUM GAIN REACHED");
+        gain_max = true;
+    }
+
+    gain_max = (gain < 0.9975f)? false: true;
+
+    if (gain < 0.0525f && !gain_min){
+            gcs().send_text(MAV_SEVERITY_WARNING, "MINIMUM GAIN REACHED");
+            gain_min = true;
+    }
+    
+    gain_min = (gain > 0.0525f)? false: true;
+    return gain;
+}
+
 
 /*************************************************************
  *  throttle control
