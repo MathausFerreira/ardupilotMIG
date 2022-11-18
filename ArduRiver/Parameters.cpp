@@ -514,11 +514,11 @@ const AP_Param::Info Copter::var_info[] = {
 #endif
 
     // @Group: ATC_
-    // @Path: ../libraries/AC_AttitudeControl/AC_AttitudeControl.cpp,../libraries/AC_AttitudeControl/AC_AttitudeControl_Multi.cpp,../libraries/AC_AttitudeControl/AC_AttitudeControl_Heli.cpp
+    // @Path: ../libraries/AC_AttitudeControl/AC_AttitudeControl.cpp,../libraries/AC_AttitudeControl/AC_AttitudeControl_River.cpp,../libraries/AC_AttitudeControl/AC_AttitudeControl_Heli.cpp
 // #if FRAME_CONFIG == HELI_FRAME
 //     GOBJECTPTR(attitude_control, "ATC_", AC_AttitudeControl_Heli),
 // #else
-    GOBJECTPTR(attitude_control, "ATC_", AC_AttitudeControl_Multi),
+    GOBJECTPTR(attitude_control, "ATC_", AC_AttitudeControl_River),
 // #endif
 
     // @Group: PSC

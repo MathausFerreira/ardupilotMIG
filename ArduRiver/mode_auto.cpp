@@ -113,17 +113,11 @@ void ModeAuto::run()
     // call the correct auto controller
     switch (_mode) {
 
+    case SubMode::LAND:
     case SubMode::TAKEOFF:
-        takeoff_run();
-        break;
-
     case SubMode::WP:
     case SubMode::CIRCLE_MOVE_TO_EDGE:
         wp_run();
-        break;
-
-    case SubMode::LAND:
-        land_run();
         break;
 
     case SubMode::RTL:

@@ -452,8 +452,8 @@ void Copter::allocate_motors(void)
         ac_var_info = AC_AttitudeControl_Multi_6DoF::var_info;
 #endif // AP_SCRIPTING_ENABLED
     } else {
-        attitude_control = new AC_AttitudeControl_Multi(*ahrs_view, aparm, *motors, scheduler.get_loop_period_s());
-        ac_var_info = AC_AttitudeControl_Multi::var_info;
+        attitude_control = new AC_AttitudeControl_River(*ahrs_view, aparm, *motors, scheduler.get_loop_period_s());
+        ac_var_info = AC_AttitudeControl_River::var_info;
     }
 #else
     attitude_control = new AC_AttitudeControl_Heli(*ahrs_view, aparm, *motors, scheduler.get_loop_period_s());
