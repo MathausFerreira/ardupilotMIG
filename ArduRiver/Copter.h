@@ -77,13 +77,13 @@
 #if FRAME_CONFIG == HELI_FRAME
     #define AC_AttitudeControl_t AC_AttitudeControl_Heli
 #else
-    #define AC_AttitudeControl_t AC_AttitudeControl_Multi
+    #define AC_AttitudeControl_t AC_AttitudeControl_River
 #endif
 
 #if FRAME_CONFIG == HELI_FRAME
  #define MOTOR_CLASS AP_MotorsHeli
 #else
- #define MOTOR_CLASS AP_MotorsMulticopter
+ #define MOTOR_CLASS AP_MotorsRiver
 #endif
 
 #if MODE_AUTOROTATE_ENABLED == ENABLED
