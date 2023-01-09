@@ -22,6 +22,7 @@ Mode::Mode(void) :
     channel_pitch(copter.channel_pitch),
     channel_throttle(copter.channel_throttle),
     channel_yaw(copter.channel_yaw),
+    channel_gain(copter.channel_gain),
     G_Dt(copter.G_Dt)
 { };
 
@@ -971,6 +972,11 @@ float Mode::get_pilot_desired_yaw_rate(float yaw_in)
 float Mode::get_pilot_desired_climb_rate(float throttle_control)
 {
     return copter.get_pilot_desired_climb_rate(throttle_control);
+}
+
+float Mode::get_gain()
+{
+    return copter.get_gain(); // Mathaus
 }
 
 float Mode::get_non_takeoff_throttle()

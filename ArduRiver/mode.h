@@ -115,6 +115,9 @@ public:
     virtual bool pause() { return false; };
     virtual bool resume() { return false; };
 
+    float get_gain();
+
+
 protected:
 
     // helper functions
@@ -172,6 +175,7 @@ protected:
     RC_Channel *&channel_pitch;
     RC_Channel *&channel_throttle;
     RC_Channel *&channel_yaw;
+    RC_Channel *&channel_gain;
     float &G_Dt;
 
     // note that we support two entirely different automatic takeoffs:

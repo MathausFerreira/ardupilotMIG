@@ -7,6 +7,16 @@ class VehicleInfo(object):
         extra_mavlink_cmds: extra parameters that will be passed to mavproxy
         """
         self.options = {
+    "ArduRiver": {
+        "default_frame": "gazebo-migbot0",
+        "frames": {
+            "gazebo-migbot0": {
+                "make_target": "sitl",            
+                "waf_target": "bin/ArduRiver",
+                "default_params_filename": "default_params/migbot0.parm",
+            },
+        },
+    },
     "ArduCopter": {
         "default_frame": "quad",
         "frames": {

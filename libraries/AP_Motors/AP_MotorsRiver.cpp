@@ -137,7 +137,7 @@ void AP_MotorsRiver::CalibrateServo(float &Pwm_servo){
 
 float _key_radio_passthrough = 0.0f;
 
-// pilot input in the -1 ~ +1 range for roll, pitch and yaw. 0~1 range for throttle
+// key to change allocation mode
 void AP_MotorsRiver::radio_key_passthrough_to_motors(float key)
 {
     _key_radio_passthrough = key;
@@ -173,7 +173,8 @@ void AP_MotorsRiver::output_armed_stabilizing() {
     
     if(_key_radio_passthrough<0)
     {
-        FOSSEN_allocation_matrix(Fx, Fy, Tn, theta_m1, theta_m2, theta_m3, theta_m4, Pwm1, Pwm2, Pwm3, Pwm4);
+        Differential_allocation_matrix(Fx, Fy, Tn, theta_m1, theta_m2, theta_m3, theta_m4, Pwm1, Pwm2, Pwm3, Pwm4);
+        // FOSSEN_allocation_matrix(Fx, Fy, Tn, theta_m1, theta_m2, theta_m3, theta_m4, Pwm1, Pwm2, Pwm3, Pwm4);
     }else{
         Differential_allocation_matrix(Fx, Fy, Tn, theta_m1, theta_m2, theta_m3, theta_m4, Pwm1, Pwm2, Pwm3, Pwm4);
     }
