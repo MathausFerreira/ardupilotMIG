@@ -82,6 +82,26 @@ public:
     // user settable parameters
     static const struct AP_Param::GroupInfo var_info[];
 
+    //===================== MATHAUS
+
+    // Variáveis auxiliares para Fx e Fy
+    float X = 0.0f;
+    float Y = 0.0f;
+    float Z = 0.0f;
+    
+    float map_cube(float x, float y, float z);
+    void output_to_boat(float fx, float fy);
+
+    void input_euler_angle_roll_pitch_euler_rate_yaw(float euler_roll_angle_cd, float euler_pitch_angle_cd, float euler_yaw_rate_cds)override;
+    void input_euler_angle_roll_pitch_yaw(float euler_roll_angle_cd, float euler_pitch_angle_cd, float euler_yaw_angle_cd, bool slew_yaw)override;
+    void input_rate_bf_roll_pitch_yaw(float roll_rate_bf_cds, float pitch_rate_bf_cds, float yaw_rate_bf_cds)override;
+    void input_rate_stabilize_roll_pitch_yaw(float roll, float pitch,float yaw);
+
+
+
+
+
+
 protected:
 
     // update_throttle_rpy_mix - updates thr_low_comp value towards the target
