@@ -12,7 +12,7 @@ class VehicleInfo(object):
         "frames": {
             "gazebo-migbot0": {
                 "make_target": "sitl",            
-                "waf_target": "bin/ArduRiver",
+                "waf_target": "bin/arduriver",
                 "default_params_filename": "default_params/migbot0.parm",
             },
         },
