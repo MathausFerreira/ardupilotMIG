@@ -241,7 +241,7 @@ def kill_tasks():
     if cmd_opts.coverage:
         import psutil
         for proc in psutil.process_iter(['pid', 'name', 'environ']):
-            if proc.name() not in ["arducopter", "ardurover", "arduplane", "ardusub", "antennatracker"]:
+            if proc.name() not in ["arducopter","arduriver", "ardurover", "arduplane", "ardusub", "antennatracker"]:
                 # only kill vehicle that way
                 continue
             if os.environ['SIM_VEHICLE_SESSION'] not in proc.environ().get('SIM_VEHICLE_SESSION'):
@@ -262,6 +262,7 @@ def kill_tasks():
             'lt-JSBSim',
             'ArduPlane.elf',
             'ArduCopter.elf',
+            'ArduRiver.elf',
             'ArduSub.elf',
             'Rover.elf',
             'AntennaTracker.elf',
@@ -272,7 +273,8 @@ def kill_tasks():
             'scrimmage',
             'ardurover',
             'arduplane',
-            'arducopter'
+            'arducopter',
+            'arduriver'
         }
         for vehicle in vinfo.options:
             for frame in vinfo.options[vehicle]["frames"]:
@@ -904,6 +906,8 @@ vehicle_choices.append("copter")  # should change to ArduCopter at some stage
 vehicle_choices.append("plane")  # should change to ArduPlane at some stage
 vehicle_choices.append("sub")  # should change to Sub at some stage
 vehicle_choices.append("blimp")  # should change to Blimp at some stage
+vehicle_choices.append("River")  # should change to ArduRiver at some stage
+vehicle_choices.append("river")  # should change to ArduRiver at some stage
 
 parser.add_option("-v", "--vehicle",
                   type='choice',
@@ -1308,6 +1312,8 @@ vehicle_map = {
     "plane": "ArduPlane",  # will switch eventually
     "sub": "ArduSub",  # will switch eventually
     "blimp" : "Blimp", # will switch eventually
+    "river": "ArduRiver", # will switch eventually
+    "River": "ArduRiver", # will switch eventually
 }
 if cmd_opts.vehicle in vehicle_map:
     progress("%s is now known as %s" %
