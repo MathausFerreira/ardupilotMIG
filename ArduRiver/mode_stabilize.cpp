@@ -9,7 +9,7 @@
 void ModeStabilize::run()
 {
     // apply simple mode transform to pilot inputs
-    update_simple_mode();
+    // update_simple_mode();
 
     // convert pilot input to lean angles
     float target_roll, target_pitch;

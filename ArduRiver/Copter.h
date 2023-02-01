@@ -193,16 +193,16 @@ public:
     friend class Mode;
     // friend class ModeAcro;
     // friend class ModeAcro_Heli;
-    friend class ModeAltHold;
+    // friend class ModeAltHold;
     friend class ModeAuto;
     friend class ModeAutoTune;
     friend class ModeAvoidADSB;
     friend class ModeBrake;
     friend class ModeCircle;
-    friend class ModeDrift;
+    // friend class ModeDrift;
     // friend class ModeFlip;
     // friend class ModeFlowHold;
-    friend class ModeFollow;
+    // friend class ModeFollow;
     friend class ModeGuided;
     // friend class ModeLand;
     // friend class ModeLoiter;
@@ -953,9 +953,9 @@ private:
 #if MODE_CIRCLE_ENABLED == ENABLED
     ModeCircle mode_circle;
 #endif
-#if MODE_FOLLOW_ENABLED == ENABLED
-    ModeFollow mode_follow;
-#endif
+// #if MODE_FOLLOW_ENABLED == ENABLED
+//     ModeFollow mode_follow;
+// #endif
 #if MODE_GUIDED_ENABLED == ENABLED
     ModeGuided mode_guided;
 #endif

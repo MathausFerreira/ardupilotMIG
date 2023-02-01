@@ -31,10 +31,10 @@ bool ModePosHold::init(bool ignore_checks)
     pos_control->set_max_speed_accel_z(-get_pilot_speed_dn(), g.pilot_speed_up, g.pilot_accel_z);
     pos_control->set_correction_speed_accel_z(-get_pilot_speed_dn(), g.pilot_speed_up, g.pilot_accel_z);
 
-    // initialise the vertical position controller
-    if (!pos_control->is_active_z()) {
-        pos_control->init_z_controller();
-    }
+    // // initialise the vertical position controller
+    // if (!pos_control->is_active_z()) {
+    //     pos_control->init_z_controller();
+    // }
 
     // initialise lean angles to current attitude
     pilot_roll = 0.0f;
@@ -43,15 +43,15 @@ bool ModePosHold::init(bool ignore_checks)
     // compute brake_gain
     brake.gain = (15.0f * (float)g.poshold_brake_rate + 95.0f) * 0.01f;
 
-    if (copter.ap.land_complete) {
-        // if landed begin in loiter mode
-        roll_mode = RPMode::LOITER;
-        pitch_mode = RPMode::LOITER;
-    } else {
-        // if not landed start in pilot override to avoid hard twitch
-        roll_mode = RPMode::PILOT_OVERRIDE;
-        pitch_mode = RPMode::PILOT_OVERRIDE;
-    }
+    // if (copter.ap.land_complete) {
+    //     // if landed begin in loiter mode
+    //     roll_mode = RPMode::LOITER;
+    //     pitch_mode = RPMode::LOITER;
+    // } else {
+    //     // if not landed start in pilot override to avoid hard twitch
+    //     roll_mode = RPMode::PILOT_OVERRIDE;
+    //     pitch_mode = RPMode::PILOT_OVERRIDE;
+    // }
 
     // initialise loiter
     loiter_nav->clear_pilot_desired_acceleration();
@@ -67,7 +67,7 @@ bool ModePosHold::init(bool ignore_checks)
 // should be called at 100hz or more
 void ModePosHold::run()
 {
-    float controller_to_pilot_roll_mix; // mix of controller and pilot controls.  0 = fully last controller controls, 1 = fully pilot controls
+    float controller_to_pilot_roll_mix;     // mix of controller and pilot controls.  0 = fully last controller controls, 1 = fully pilot controls
     float controller_to_pilot_pitch_mix;    // mix of controller and pilot controls.  0 = fully last controller controls, 1 = fully pilot controls
     const Vector3f& vel = inertial_nav.get_velocity_neu_cms();
 
@@ -86,7 +86,7 @@ void ModePosHold::run()
     float target_yaw_rate = get_pilot_desired_yaw_rate(channel_yaw->norm_input_dz());
 
     // get pilot desired climb rate (for alt-hold mode and take-off)
-    float target_climb_rate = get_pilot_desired_climb_rate(channel_throttle->get_control_in());
+    float target_climb_rate = 0.0f*get_pilot_desired_climb_rate(channel_throttle->get_control_in()); //Mathaus
     target_climb_rate = constrain_float(target_climb_rate, -get_pilot_speed_dn(), g.pilot_speed_up);
 
     // relax loiter target if we might be landed
@@ -172,7 +172,7 @@ void ModePosHold::run()
     // poshold specific behaviour to calculate desired roll, pitch angles
     // convert inertial nav earth-frame velocities to body-frame
     // To-Do: move this to AP_Math (or perhaps we already have a function to do this)
-    float vel_fw = vel.x*ahrs.cos_yaw() + vel.y*ahrs.sin_yaw();
+    float vel_fw    =  vel.x*ahrs.cos_yaw() + vel.y*ahrs.sin_yaw();
     float vel_right = -vel.x*ahrs.sin_yaw() + vel.y*ahrs.cos_yaw();
 
     // If not in LOITER, retrieve latest wind compensation lean angles related to current yaw

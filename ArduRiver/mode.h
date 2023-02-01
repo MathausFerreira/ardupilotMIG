@@ -32,8 +32,8 @@ public:
         AVOID_ADSB =   19,  // automatic avoidance of obstacles in the macro scale - e.g. full-sized aircraft
         GUIDED_NOGPS = 20,  // guided mode but only accepts attitude and altitude
         SMART_RTL =    21,  // SMART_RTL returns to home by retracing its steps
-        FLOWHOLD  =    22,  // FLOWHOLD holds position with optical flow without rangefinder
-        FOLLOW    =    23,  // follow attempts to follow another vehicle or ground station
+        //FLOWHOLD  =    22,  // FLOWHOLD holds position with optical flow without rangefinder
+        //FOLLOW    =    23,  // follow attempts to follow another vehicle or ground station
         ZIGZAG    =    24,  // ZIGZAG mode is able to fly in a zigzag manner with predefined point A and point B
         SYSTEMID  =    25,  // System ID mode produces automated system identification signals in the controllers
         // AUTOROTATE =   26,  // Autonomous autorotation
@@ -645,12 +645,7 @@ private:
 /*
   wrapper class for AC_AutoTune
  */
-
-#if FRAME_CONFIG == HELI_FRAME
-class AutoTune : public AC_AutoTune_Heli
-#else
 class AutoTune : public AC_AutoTune_Multi
-#endif
 {
 public:
     bool init() override;
@@ -828,12 +823,12 @@ private:
 };*/
 
 
-#if !HAL_MINIMIZE_FEATURES && AP_OPTICALFLOW_ENABLED
+//#if !HAL_MINIMIZE_FEATURES && AP_OPTICALFLOW_ENABLED
 /*
   class to support FLOWHOLD mode, which is a position hold mode using
   optical flow directly, avoiding the need for a rangefinder
  */
-
+/*
 class ModeFlowHold : public Mode {
 public:
     // need a constructor for parameters
@@ -915,7 +910,7 @@ private:
     uint32_t last_stick_input_ms;
 };
 #endif // AP_OPTICALFLOW_ENABLED
-
+*/
 
 class ModeGuided : public Mode {
 
@@ -1663,7 +1658,7 @@ protected:
 private:
 
 };
-
+/*
 class ModeFollow : public ModeGuided {
 
 public:
@@ -1692,7 +1687,7 @@ protected:
     int32_t wp_bearing() const override;
 
     uint32_t last_log_ms;   // system time of last time desired velocity was logging
-};
+};*/
 
 class ModeZigZag : public Mode {        
 

@@ -1,5 +1,6 @@
 {
     "cSpell.language": "en-GB",
     "astyle.astylerc": "${workspaceFolder}/Tools/CodeStyle/astylerc",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "${workspaceFolder}/libraries/SITL/examples/JSON/C++"
 }

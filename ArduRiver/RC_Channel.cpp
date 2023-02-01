@@ -75,9 +75,9 @@ void RC_Channel_Copter::init_aux_function(const aux_func_t ch_option, const AuxS
     case AUX_FUNC::BRAKE:
     case AUX_FUNC::CIRCLE:
     case AUX_FUNC::DRIFT:
-    case AUX_FUNC::FLIP:
-    case AUX_FUNC::FLOWHOLD:
-    case AUX_FUNC::FOLLOW:
+    // case AUX_FUNC::FLIP:
+    // case AUX_FUNC::FLOWHOLD:
+    // case AUX_FUNC::FOLLOW:
     case AUX_FUNC::GUIDED:
     case AUX_FUNC::LAND:
     case AUX_FUNC::LOITER:
@@ -301,9 +301,9 @@ bool RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const AuxSwi
         //     do_aux_function_change_mode(Mode::Number::LOITER, ch_flag);
         //     break;
 
-        case AUX_FUNC::FOLLOW:
-            do_aux_function_change_mode(Mode::Number::FOLLOW, ch_flag);
-            break;
+        // case AUX_FUNC::FOLLOW:
+        //     do_aux_function_change_mode(Mode::Number::FOLLOW, ch_flag);
+        //     break;
 
         case AUX_FUNC::PARACHUTE_ENABLE:
 #if PARACHUTE == ENABLED
@@ -511,11 +511,11 @@ bool RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const AuxSwi
 // #endif
 //             break;
 
-        case AUX_FUNC::FLOWHOLD:
-#if AP_OPTICALFLOW_ENABLED
-            do_aux_function_change_mode(Mode::Number::FLOWHOLD, ch_flag);
-#endif
-            break;
+//         case AUX_FUNC::FLOWHOLD:
+// #if AP_OPTICALFLOW_ENABLED
+//             do_aux_function_change_mode(Mode::Number::FLOWHOLD, ch_flag);
+// #endif
+//             break;
 
         case AUX_FUNC::CIRCLE:
 #if MODE_CIRCLE_ENABLED == ENABLED

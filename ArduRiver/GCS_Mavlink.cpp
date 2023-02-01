@@ -27,7 +27,7 @@ MAV_MODE GCS_MAVLINK_Copter::base_mode() const
     case Mode::Number::RTL:
     // case Mode::Number::LOITER:
     case Mode::Number::AVOID_ADSB:
-    case Mode::Number::FOLLOW:
+    // case Mode::Number::FOLLOW:
     case Mode::Number::GUIDED:
     case Mode::Number::CIRCLE:
     case Mode::Number::POSHOLD:
