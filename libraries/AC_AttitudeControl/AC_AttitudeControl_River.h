@@ -97,7 +97,10 @@ public:
     void input_rate_bf_roll_pitch_yaw(float roll_rate_bf_cds, float pitch_rate_bf_cds, float yaw_rate_bf_cds)override;
     void input_rate_stabilize_roll_pitch_yaw(float roll, float pitch,float yaw);
 
-
+  // Command a thrust vector in the earth frame and a heading angle and/or rate
+    virtual void input_thrust_vector_rate_heading(const Vector3f& thrust_vector, float heading_rate_cds, bool slew_yaw = true)override;
+    virtual void input_thrust_vector_heading(const Vector3f& thrust_vector, float heading_angle_cd, float heading_rate_cds)override;
+    void input_thrust_vector_heading(const Vector3f& thrust_vector, float heading_cd) {input_thrust_vector_heading(thrust_vector, heading_cd, 0.0f);}
 
 
 

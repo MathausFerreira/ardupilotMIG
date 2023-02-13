@@ -959,13 +959,13 @@ void ModeAuto::wp_run()
     pos_control->update_z_controller();
 
     // call attitude controller
-    if (auto_yaw.mode() == AUTO_YAW_HOLD) {
+    //if (auto_yaw.mode() == AUTO_YAW_HOLD) { //NEVER GONNA HAPPEN ANYMORE
         // roll & pitch from waypoint controller, yaw rate from pilot
-        attitude_control->input_thrust_vector_rate_heading(wp_nav->get_thrust_vector(), target_yaw_rate);
-    } else {
+       // attitude_control->input_thrust_vector_rate_heading(wp_nav->get_thrust_vector(), target_yaw_rate);
+    //} else {
         // roll, pitch from waypoint controller, yaw heading from auto_heading()
         attitude_control->input_thrust_vector_heading(wp_nav->get_thrust_vector(), auto_yaw.yaw(), auto_yaw.rate_cds());
-    }
+    //}
 }
 
 // auto_land_run - lands in auto mode
@@ -1676,8 +1676,6 @@ void ModeAuto::do_yaw(const AP_Mission::Mission_Command& cmd)
 /********************************************************************************/
 // Do (Now) commands
 /********************************************************************************/
-
-
 
 void ModeAuto::do_change_speed(const AP_Mission::Mission_Command& cmd)
 {

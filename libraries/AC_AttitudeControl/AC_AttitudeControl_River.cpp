@@ -527,7 +527,108 @@ void AC_AttitudeControl_River::input_rate_bf_roll_pitch_yaw(float roll_rate_bf_c
     attitude_controller_run_quat();
 }
 
+// Command a thrust vector and heading rate
+void AC_AttitudeControl_River::input_thrust_vector_rate_heading(const Vector3f& thrust_vector, float heading_rate_cds, bool slew_yaw)
+{
+    // Convert from centidegrees on public interface to radians
+    float heading_rate = radians(heading_rate_cds * 0.01f);
+    if (slew_yaw) {
+        // a zero _angle_vel_yaw_max means that setting is disabled
+        const float slew_yaw_max_rads = get_slew_yaw_max_rads();
+        heading_rate = constrain_float(heading_rate, -slew_yaw_max_rads, slew_yaw_max_rads);
+    }
 
+    // calculate the attitude target euler angles
+    _attitude_target.to_euler(_euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
+
+    // convert thrust vector to a quaternion attitude
+    Quaternion thrust_vec_quat = attitude_from_thrust_vector(thrust_vector, 0.0f);
+
+    // calculate the angle error in x and y.
+    float thrust_vector_diff_angle;
+    Quaternion thrust_vec_correction_quat;
+    Vector3f attitude_error;
+    float returned_thrust_vector_angle;
+    thrust_vector_rotation_angles(thrust_vec_quat, _attitude_target, thrust_vec_correction_quat, attitude_error, returned_thrust_vector_angle, thrust_vector_diff_angle);
+
+    if (_rate_bf_ff_enabled) {
+        // When yaw acceleration limiting is enabled, the yaw input shaper constrains angular acceleration about the yaw axis, slewing
+        // the output rate towards the input rate.
+        _ang_vel_target.x = input_shaping_angle(attitude_error.x, _input_tc, get_accel_roll_max_radss(), _ang_vel_target.x, _dt);
+        _ang_vel_target.y = input_shaping_angle(attitude_error.y, _input_tc, get_accel_pitch_max_radss(), _ang_vel_target.y, _dt);
+
+        // When yaw acceleration limiting is enabled, the yaw input shaper constrains angular acceleration about the yaw axis, slewing
+        // the output rate towards the input rate.
+        _ang_vel_target.z = input_shaping_ang_vel(_ang_vel_target.z, heading_rate, get_accel_yaw_max_radss(), _dt);
+
+        // Limit the angular velocity
+        ang_vel_limit(_ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
+    } else {
+        Quaternion yaw_quat;
+        yaw_quat.from_axis_angle(Vector3f{0.0f, 0.0f, heading_rate * _dt});
+        _attitude_target = _attitude_target * thrust_vec_correction_quat * yaw_quat;
+
+        // Set rate feedforward requests to zero
+        _euler_rate_target.zero();
+        _ang_vel_target.zero();
+    }
+
+    // Convert body-frame angular velocity into euler angle derivative of desired attitude
+    ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
+
+    // Call quaternion attitude controller
+    attitude_controller_run_quat();
+}
+
+
+// Command a thrust vector, heading and heading rate
+void AC_AttitudeControl_River::input_thrust_vector_heading(const Vector3f& thrust_vector, float heading_angle_cd, float heading_rate_cds)
+{
+    // a zero _angle_vel_yaw_max means that setting is disabled
+    const float slew_yaw_max_rads = get_slew_yaw_max_rads() < 0.1? 1.0f:get_slew_yaw_max_rads(); //Mathaus= get_slew_yaw_max_rads();
+    
+
+    // Convert from centidegrees on public interface to radians
+    float heading_rate = constrain_float(radians(heading_rate_cds * 0.01f), -slew_yaw_max_rads, slew_yaw_max_rads);
+    float heading_angle = radians(heading_angle_cd * 0.01f);
+
+    // calculate the attitude target euler angles
+    _attitude_target.to_euler(_euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
+
+    // convert thrust vector and heading to a quaternion attitude
+    const Quaternion desired_attitude_quat = attitude_from_thrust_vector(thrust_vector, heading_angle);
+
+    if (_rate_bf_ff_enabled) {
+        // calculate the angle error in x and y.
+        Vector3f attitude_error;
+        float thrust_vector_diff_angle;
+        Quaternion thrust_vec_correction_quat;
+        float returned_thrust_vector_angle;
+        thrust_vector_rotation_angles(desired_attitude_quat, _attitude_target, thrust_vec_correction_quat, attitude_error, returned_thrust_vector_angle, thrust_vector_diff_angle);
+
+        // When yaw acceleration limiting is enabled, the yaw input shaper constrains angular acceleration about the yaw axis, slewing
+        // the output rate towards the input rate.
+        _ang_vel_target.x = input_shaping_angle(attitude_error.x, _input_tc, get_accel_roll_max_radss(), _ang_vel_target.x, _dt);
+        _ang_vel_target.y = input_shaping_angle(attitude_error.y, _input_tc, get_accel_pitch_max_radss(), _ang_vel_target.y, _dt);
+        _ang_vel_target.z = input_shaping_angle(attitude_error.z, _input_tc, get_accel_yaw_max_radss(), _ang_vel_target.z, heading_rate, slew_yaw_max_rads, _dt);
+
+        // Limit the angular velocity
+        ang_vel_limit(_ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), slew_yaw_max_rads);
+    } else {
+        // set persisted quaternion target attitude
+        _attitude_target = desired_attitude_quat;
+
+        // Set rate feedforward requests to zero
+        _euler_rate_target.zero();
+        _ang_vel_target.zero();
+    }
+
+    // Convert body-frame angular velocity into euler angle derivative of desired attitude
+    ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
+
+    // Call quaternion attitude controller
+    attitude_controller_run_quat();
+}
 
 
 
