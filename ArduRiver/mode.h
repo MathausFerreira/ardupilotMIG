@@ -420,10 +420,10 @@ public:
         CIRCLE,
         NAVGUIDED,
         LOITER,
-        LOITER_TO_ALT,
-        NAV_PAYLOAD_PLACE,
         NAV_SCRIPT_TIME,
         NAV_ATTITUDE_TIME,
+        //LOITER_TO_ALT,
+        // NAV_PAYLOAD_PLACE,
     };
 
     // set submode.  returns true on success, false on failure

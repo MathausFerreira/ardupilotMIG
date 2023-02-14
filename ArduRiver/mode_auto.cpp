@@ -20,7 +20,7 @@
  */
 
 // auto_init - initialise auto controller
-bool ModeAuto::init(bool ignore_checks)
+bool ModeAuto::init(bool ignore_checks) //visto
 {
     auto_RTL = false;
     if (mission.num_commands() > 1 || ignore_checks) {
@@ -53,11 +53,6 @@ bool ModeAuto::init(bool ignore_checks)
         // reset flag indicating if pilot has applied roll or pitch inputs during landing
         copter.ap.land_repo_active = false;
 
-// #if PRECISION_LANDING == ENABLED
-//         // initialise precland state machine
-//         copter.precland_statemachine.init();
-// #endif
-
         return true;
     } else {
         return false;
@@ -65,21 +60,17 @@ bool ModeAuto::init(bool ignore_checks)
 }
 
 // stop mission when we leave auto mode
-void ModeAuto::exit()
+void ModeAuto::exit() //visto
 {
     if (copter.mode_auto.mission.state() == AP_Mission::MISSION_RUNNING) {
         copter.mode_auto.mission.stop();
     }
-#if HAL_MOUNT_ENABLED
-    copter.camera_mount.set_mode_to_default();
-#endif  // HAL_MOUNT_ENABLED
-
     auto_RTL = false;
 }
 
 // auto_run - runs the auto controller
 //      should be called at 100hz or more
-void ModeAuto::run()
+void ModeAuto::run() //visto
 {
     // start or update mission
     if (waiting_to_start) {
@@ -106,7 +97,6 @@ void ModeAuto::run()
                 }
             }
         }
-
         mission.update();
     }
 
@@ -139,13 +129,13 @@ void ModeAuto::run()
         loiter_run();
         break;
 
-    case SubMode::LOITER_TO_ALT:
-        loiter_to_alt_run();
-        break;
+    //  case SubMode::LOITER_TO_ALT:
+    //     loiter_to_alt_run();
+    //     break;
 
-    case SubMode::NAV_PAYLOAD_PLACE:
-        payload_place_run();
-        break;
+    // case SubMode::NAV_PAYLOAD_PLACE:
+    //     payload_place_run();
+    //     break;
 
     case SubMode::NAV_ATTITUDE_TIME:
         nav_attitude_time_run();
@@ -161,7 +151,7 @@ void ModeAuto::run()
 }
 
 // return true if a position estimate is required
-bool ModeAuto::requires_GPS() const
+bool ModeAuto::requires_GPS() const //visto
 {
     // position estimate is required in all sub modes except attitude control
     return _mode != SubMode::NAV_ATTITUDE_TIME;
@@ -287,7 +277,7 @@ void ModeAuto::rtl_start()
 }
 
 // initialise waypoint controller to implement take-off
-void ModeAuto::takeoff_start(const Location& dest_loc)
+/*void ModeAuto::takeoff_start(const Location& dest_loc)
 {
     if (!copter.current_loc.initialised()) {
         // this should never happen because mission commands are not executed until
@@ -340,7 +330,7 @@ void ModeAuto::takeoff_start(const Location& dest_loc)
     // set submode
     set_submode(SubMode::TAKEOFF);
 }
-
+*/
 // auto_wp_start - initialises waypoint controller to implement flying to a particular destination
 void ModeAuto::wp_start(const Location& dest_loc)
 {
@@ -521,7 +511,7 @@ bool ModeAuto::is_taking_off() const
 }
 
 // auto_payload_place_start - initialises controller to implement a placing
-void ModeAuto::payload_place_start()
+/*void ModeAuto::payload_place_start()
 {
     nav_payload_place.state = PayloadPlaceStateType_Calibrating_Hover_Start;
 
@@ -548,7 +538,7 @@ void ModeAuto::payload_place_start()
 
     // set submode
     set_submode(SubMode::NAV_PAYLOAD_PLACE);
-}
+}*/
 
 // returns true if pilot's yaw input should be used to adjust vehicle's heading
 bool ModeAuto::use_pilot_yaw(void) const
@@ -569,19 +559,22 @@ bool ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
     ///
     /// navigation commands
     ///
+    // case MAV_CMD_NAV_VTOL_TAKEOFF:
+    // case MAV_CMD_NAV_TAKEOFF:                   // 22
+    //     do_takeoff(cmd);
+    //     break;
     case MAV_CMD_NAV_VTOL_TAKEOFF:
     case MAV_CMD_NAV_TAKEOFF:                   // 22
-        do_takeoff(cmd);
-        break;
-
+    case MAV_CMD_NAV_VTOL_LAND:
+    case MAV_CMD_NAV_LAND:
     case MAV_CMD_NAV_WAYPOINT:                  // 16  Navigate to Waypoint
         do_nav_wp(cmd);
         break;
 
-    case MAV_CMD_NAV_VTOL_LAND:
-    case MAV_CMD_NAV_LAND:              // 21 LAND to Waypoint
-        do_land(cmd);
-        break;
+    // case MAV_CMD_NAV_VTOL_LAND:
+    // case MAV_CMD_NAV_LAND:              // 21 LAND to Waypoint
+    //     do_land(cmd);
+    //     break;
 
     case MAV_CMD_NAV_LOITER_UNLIM:              // 17 Loiter indefinitely
         do_loiter_unlimited(cmd);
@@ -595,9 +588,9 @@ bool ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
         do_loiter_time(cmd);
         break;
 
-    case MAV_CMD_NAV_LOITER_TO_ALT:
-        do_loiter_to_alt(cmd);
-        break;
+    // case MAV_CMD_NAV_LOITER_TO_ALT:
+    //     do_loiter_to_alt(cmd);
+    //     break;
 
     case MAV_CMD_NAV_RETURN_TO_LAUNCH:             //20
         do_RTL();
@@ -617,9 +610,9 @@ bool ModeAuto::start_command(const AP_Mission::Mission_Command& cmd)
         do_nav_delay(cmd);
         break;
 
-    case MAV_CMD_NAV_PAYLOAD_PLACE:              // 94 place at Waypoint
-        do_payload_place(cmd);
-        break;
+    // case MAV_CMD_NAV_PAYLOAD_PLACE:              // 94 place at Waypoint
+    //     do_payload_place(cmd);
+    //     break;
 
 #if AP_SCRIPTING_ENABLED
     case MAV_CMD_NAV_SCRIPT_TIME:
@@ -825,9 +818,9 @@ bool ModeAuto::verify_command(const AP_Mission::Mission_Command& cmd)
         cmd_complete = verify_land();
         break;
 
-    case MAV_CMD_NAV_PAYLOAD_PLACE:
-        cmd_complete = verify_payload_place();
-        break;
+    // case MAV_CMD_NAV_PAYLOAD_PLACE:
+    //     cmd_complete = verify_payload_place();
+    //     break;
 
     case MAV_CMD_NAV_LOITER_UNLIM:
         cmd_complete = verify_loiter_unlimited();
@@ -1155,7 +1148,7 @@ void ModeAuto::nav_attitude_time_run()
 
 // auto_payload_place_run - places an object in auto mode
 //      called by auto_run at 100hz or more
-void ModeAuto::payload_place_run()
+/*void ModeAuto::payload_place_run()
 {
     if (!payload_place_run_should_run()) {
         zero_throttle_and_relax_ac();
@@ -1221,7 +1214,7 @@ void ModeAuto::payload_place_run_descend()
     land_run_horizontal_control();
     land_run_vertical_control();
 }
-
+*/
 // sets the target_loc's alt to the vehicle's current alt but does not change target_loc's frame
 // in the case of terrain altitudes either the terrain database or the rangefinder may be used
 // returns true on success, false on failure
@@ -1486,7 +1479,7 @@ void ModeAuto::do_loiter_time(const AP_Mission::Mission_Command& cmd)
 
 // do_loiter_alt - initiate loitering at a point until a given altitude is reached
 // note: caller should set yaw_mode
-void ModeAuto::do_loiter_to_alt(const AP_Mission::Mission_Command& cmd)
+/*void ModeAuto::do_loiter_to_alt(const AP_Mission::Mission_Command& cmd)
 {
     // re-use loiter unlimited
     do_loiter_unlimited(cmd);
@@ -1516,7 +1509,7 @@ void ModeAuto::do_loiter_to_alt(const AP_Mission::Mission_Command& cmd)
 
     // set submode
     set_submode(SubMode::LOITER_TO_ALT);
-}
+}*/
 
 // do_spline_wp - initiate move to next waypoint
 void ModeAuto::do_spline_wp(const AP_Mission::Mission_Command& cmd)
@@ -1749,7 +1742,7 @@ void ModeAuto::do_winch(const AP_Mission::Mission_Command& cmd)
 #endif
 
 // do_payload_place - initiate placing procedure
-void ModeAuto::do_payload_place(const AP_Mission::Mission_Command& cmd)
+/*void ModeAuto::do_payload_place(const AP_Mission::Mission_Command& cmd)
 {
     // if location provided we fly to that location at current altitude
     if (cmd.content.location.lat != 0 || cmd.content.location.lng != 0) {
@@ -1775,7 +1768,7 @@ void ModeAuto::do_payload_place(const AP_Mission::Mission_Command& cmd)
     }
     nav_payload_place.descend_max = cmd.p1;
 }
-
+*/
 // do_RTL - start Return-to-Launch
 void ModeAuto::do_RTL(void)
 {
@@ -1846,7 +1839,7 @@ bool ModeAuto::verify_land()
 #endif
 
 // verify_payload_place - returns true if placing has been completed
-bool ModeAuto::verify_payload_place()
+/*bool ModeAuto::verify_payload_place()
 {
     const uint16_t hover_throttle_calibrate_time = 2000; // milliseconds
     const uint16_t descend_throttle_calibrate_time = 2000; // milliseconds
@@ -1996,7 +1989,7 @@ bool ModeAuto::verify_payload_place()
     return true;
 }
 #undef debug
-
+*/
 bool ModeAuto::verify_loiter_unlimited()
 {
     return false;

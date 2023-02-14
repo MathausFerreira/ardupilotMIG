@@ -426,7 +426,6 @@ void AC_AttitudeControl_River::input_euler_angle_roll_pitch_euler_rate_yaw(float
     attitude_controller_run_quat();
 }
 
-
 // Command an euler roll, pitch and yaw angle with angular velocity feedforward and smoothing
 void AC_AttitudeControl_River::input_euler_angle_roll_pitch_yaw(float euler_roll_angle_cd, float euler_pitch_angle_cd, float euler_yaw_angle_cd, bool slew_yaw)
 {
@@ -580,7 +579,6 @@ void AC_AttitudeControl_River::input_thrust_vector_rate_heading(const Vector3f& 
     attitude_controller_run_quat();
 }
 
-
 // Command a thrust vector, heading and heading rate
 void AC_AttitudeControl_River::input_thrust_vector_heading(const Vector3f& thrust_vector, float heading_angle_cd, float heading_rate_cds)
 {
@@ -629,8 +627,6 @@ void AC_AttitudeControl_River::input_thrust_vector_heading(const Vector3f& thrus
     // Call quaternion attitude controller
     attitude_controller_run_quat();
 }
-
-
 
 
 // ================================================
