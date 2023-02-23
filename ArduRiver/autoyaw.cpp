@@ -29,20 +29,11 @@ void Mode::AutoYaw::set_mode_to_default(bool rtl)
 autopilot_yaw_mode Mode::AutoYaw::default_mode(bool rtl) const
 {
     switch (copter.g.wp_yaw_behavior) {
-
-    case WP_YAW_BEHAVIOR_NONE:
-        return AUTO_YAW_HOLD;
-
-    case WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP_EXCEPT_RTL:
-        if (rtl) {
-            return AUTO_YAW_HOLD;
-        } else {
-            return AUTO_YAW_LOOK_AT_NEXT_WP;
-        }
-
     case WP_YAW_BEHAVIOR_LOOK_AHEAD:
         return AUTO_YAW_LOOK_AHEAD;
 
+    case WP_YAW_BEHAVIOR_NONE:
+    case WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP_EXCEPT_RTL:
     case WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP:
     default:
         return AUTO_YAW_LOOK_AT_NEXT_WP;
